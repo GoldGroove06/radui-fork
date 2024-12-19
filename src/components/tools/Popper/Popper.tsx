@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { customClassSwitcher } from '~/core';
+import { clsx } from 'clsx';
 
 import { useFloating, useInteractions, useHover, FloatingArrow, arrow, offset, flip, autoPlacement, hide, shift, autoUpdate, useRole, useDismiss } from '@floating-ui/react';
 
@@ -21,7 +22,19 @@ export type PopperProps = {
     customRootClass?: string;
     activationStrategy?: 'hover';
     className?: string;
-    placement?: 'top' | 'bottom' | 'bottom-start'; // TODO: fix
+    placement?:
+        | 'top'
+        | 'bottom'
+        | 'left'
+        | 'right'
+        | 'top-start'
+        | 'top-end'
+        | 'bottom-start'
+        | 'bottom-end'
+        | 'left-start'
+        | 'left-end'
+        | 'right-start'
+        | 'right-end';
     children?: React.ReactNode; // TODO: fix
     open?: boolean;
     hoverDelay?: number;
@@ -89,16 +102,18 @@ const Popper = ({
 
     return <span>
         <span
-            className={`rad-ui-popper ${rootClass}-reference-element ${className}`} ref={refs.setReference} {...getReferenceProps(
+            className={clsx('rad-ui-popper', `${rootClass}-reference-element`, className)} ref={refs.setReference} {...getReferenceProps(
                 {
                     onClick: () => {
                         console.log('click');
                     }
                 }
             )}>{children}</span>
-        {isOpen && <div className={`${rootClass}-floating-element`} ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()} >
-            {showArrow && <FloatingArrow className={`rad-ui-arrow ${rootClass}-arrow`} ref={arrowRef} context={context} />}
-            {pop}</div>}
+        {
+            isOpen && <div className={clsx(`${rootClass}-floating-element`)} ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()} >
+                {showArrow && <FloatingArrow className={clsx(`rad-ui-arrow ${rootClass}-arrow`)} ref={arrowRef} context={context} />}
+                {pop}</div>
+        }
     </span>;
 };
 

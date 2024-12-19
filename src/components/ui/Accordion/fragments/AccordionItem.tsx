@@ -1,5 +1,5 @@
 import React, { useState, useContext, useId, useEffect, useRef } from 'react';
-
+import { clsx } from 'clsx';
 import { AccordionContext } from '../contexts/AccordionContext';
 import { AccordionItemContext } from '../contexts/AccordionItemContext';
 
@@ -61,7 +61,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ children, value, classNam
         <AccordionItemContext.Provider value={{ itemValue, setItemValue, handleBlurEvent, handleClickEvent, handleFocusEvent }}>
             <div
                 ref={accordionItemRef}
-                className={`${rootClass}-item ${className}`} {...props}
+                className={clsx(`${rootClass}-item`, className)} {...props}
                 id={`accordion-data-item-${id}`}
                 role="region"
                 aria-labelledby={`accordion-trigger-${id}`}
@@ -69,7 +69,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ children, value, classNam
                 data-state={isOpen ? 'open' : 'closed'}
                 data-rad-ui-batch-element
                 {...shouldAddFocusDataAttribute ? { 'data-rad-ui-focus-element': '' } : {}}
-
             >
                 {children}
             </div>
