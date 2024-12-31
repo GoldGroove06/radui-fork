@@ -3,6 +3,7 @@
 import path from 'path';
 import NavItem from './NavItem.js'
 import { usePathname } from 'next/navigation';
+import React, { useState, useEffect, useRef } from "react";
 
 const sections = [
     {
@@ -182,10 +183,27 @@ const sections = [
 
 
 const Navigation = () => {
+  const [contentHeight, setContentHeight] = useState(window.innerHeight);
+  const navbarRef = useRef(null);
+
+  useEffect(() => {
+    const updateContentHeight = () => {
+      if (navbarRef.current) {
+        setContentHeight(window.innerHeight - navbarRef.current.offsetHeight);
+      }
+    };
+
+    // Initial calculation
+    updateContentHeight();
+
+    // Update on resize
+    window.addEventListener("resize", updateContentHeight);
+    return () => window.removeEventListener("resize", updateContentHeight);
+  }, []);
     // get path from ssr
     const pathname = usePathname();
 
-    return <div className='border-box px-1 overflow-y-auto hidden lg:block'>
+    return <div className='border-box px-1 overflow-y-auto hidden lg:block max-h-screen sticky top-0'>
         <div className='flex-none' style={{ width: "240px", height: "80vh" }}>
             {sections.map((section, i) => {
                 return <div key={i}>

@@ -23,7 +23,7 @@ export default async function RootLayout({ children, ...props }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className='overflow-y-hidden'> 
         <Main darkModeSsrValue={darkModeSsrValue}>
           {children}
         </Main>
