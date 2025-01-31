@@ -1,7 +1,8 @@
 import React, { PropsWithChildren, useEffect, useRef } from "react";
 import clsx from "clsx";
-import ButtonGroupRoot from './fragments/ButtonGroupRoot';
-import Button2 from '~/components/ui/Button 2/Button2';
+import Primitive from '~/core/primitives/Primitive';
+
+
 
 // export type ButtonGroupProps = {
 //     buttons: { value:string }[];
@@ -9,31 +10,32 @@ import Button2 from '~/components/ui/Button 2/Button2';
 // } & PropsWithChildren
 
 const ButtonGroup = ({children, buttons}) => {
-    const itemRefs = useRef([]);
-    const handleItemClick = (index) => {
-         itemRefs.current[index].focus();
-      };
+    const buttonGroupRef = useRef(null)
+    const handleDownKey =(e, index) => {
 
-    const handleKeyDown = (event, index) => {
-        console.log(event.key)
-          if (event.key === "ArrowLeft") {
-            itemRefs.current[index - 1].focus();
-          }
-          if (event.key === "ArrowRight") {
-            itemRefs.current[index + 1].focus();
-          }
-          
-         }
+        if (e.key === 'ArrowRight') {  
+            // prevent scrolling when pressing arrow keys
+            e.preventDefault();
+            buttonGroupRef.current.children[index + 1].focus();  
+        }
+        if (e.key === 'ArrowLeft') {
+            // prevent scrolling when pressing arrow keys
+            e.preventDefault();
+            buttonGroupRef.current.children[index - 1].focus();  
+        }
+    }
     return( 
-        
-        <ButtonGroupRoot>
-            {buttons.map((button, index) => (
-                <Button2 ref={(el) => (itemRefs.current[index] = el)} onClick={() => handleItemClick(index)} onKeyDown={() => handleKeyDown(event, index)}> {button.value} </Button2>
-            )
-            )}
-    
-        </ButtonGroupRoot>
-        )
+        <div ref={buttonGroupRef}>
+            {buttons.map((item, index) => {
+                return (
+                  <Primitive.button key={index} value={item.value} className="px-4 py-2 border border-gray-700 bg-white text-black hover:bg-gray-100 hover:border-gray-900 focus:bg-gray-200 focus:border-gray-900" onKeyDown={(e) => handleDownKey(e, index)}>
+                    {item.value}
+                  </Primitive.button>
+                );
+            })
+        }
+        </div>
+    )
 }
 
 
