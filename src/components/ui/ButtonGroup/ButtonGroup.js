@@ -18,7 +18,7 @@ const ButtonGroup = ({children, buttons}) => {
        
             {buttons.map((item, index) => {
                 return (
-                  <ButtonItem key={index} value={item.value} index={index}>
+                  <ButtonItem key={index} value={item.value} index={index} length={buttons.length}>
                     {item.value}
                   </ButtonItem>
                 );

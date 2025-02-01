@@ -12,7 +12,7 @@ import { clsx } from 'clsx';
 // }
 export  const ButtonContext = createContext();
 
-const ButtonGroupRoot = ({ customRootClass = '', children, className, ...props }) => {
+const ButtonGroupRoot = ({ customRootClass = '', children, className,length, ...props }) => {
    
     const buttonGroupRef = useRef(null)
     
@@ -21,7 +21,7 @@ const ButtonGroupRoot = ({ customRootClass = '', children, className, ...props }
 
     return (
         <div className={clsx( className)} {...props} ref={buttonGroupRef}>
-            <ButtonContext.Provider value={{buttonGroupRef}}>
+            <ButtonContext.Provider value={{buttonGroupRef}} length={length}>
                 {children}
             </ButtonContext.Provider>
         </div>
