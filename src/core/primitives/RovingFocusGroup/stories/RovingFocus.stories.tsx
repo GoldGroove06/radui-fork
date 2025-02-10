@@ -1,6 +1,7 @@
 import React from 'react';
 import SandboxEditor from '~/components/tools/SandboxEditor/SandboxEditor';
 import RovingFocus from '../RovingFocus';
+import Button from '~/components/ui/Button/Button';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 
@@ -10,25 +11,25 @@ export default {
     component: RovingFocus,
     render: (args: any) => <SandboxEditor>
         <div >
-            
+        <RovingFocus.Root>
                 <RovingFocus.Group>
                     <RovingFocus.Item>
-                        Item 1
+                        <Button> item 1 </Button>
                     </RovingFocus.Item>
                     <RovingFocus.Item>
-                        Item 1
+                        <Button> item 2  </Button>
                     </RovingFocus.Item>
                     <RovingFocus.Item>
-                        Item 1
+                        <Button> item 3 </Button>
                     </RovingFocus.Item>
                 </RovingFocus.Group>
 
                 <RovingFocus.Group>
                     <RovingFocus.Item>
-                        Item 2
+                        <div> item 1 </div>
                     </RovingFocus.Item>
                 </RovingFocus.Group>
-           
+        </RovingFocus.Root> 
 
         </div>
     </SandboxEditor>
