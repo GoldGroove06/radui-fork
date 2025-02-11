@@ -25,15 +25,15 @@ function RovingFocusGroup({children} : RovingFocusGroupProps) {
               // prevent scrolling when pressing arrow keys
               e.preventDefault();
               const nextButton = refArray[position + 1]
-              if (nextButton) nextButton.current.focus()
-              else refArray[0].current.focus();  
+              if (nextButton) nextButton.current.firstChild.focus()
+              else refArray[0].current.firstChild.focus();  
           }
           if (e.key === 'ArrowLeft') {
               // prevent scrolling when pressing arrow keys
               e.preventDefault();
               const pervButton = refArray[position - 1]
-              if (pervButton) pervButton.current.focus();
-              else refArray[refArray.length - 1].current.focus();  
+              if (pervButton) pervButton.current.firstChild.focus();
+              else refArray[refArray.length - 1].current.firstChild.focus();  
           }
       }
     
