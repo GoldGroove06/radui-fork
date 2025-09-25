@@ -1,4 +1,4 @@
-import React, { forwardRef, ElementRef, ComponentPropsWithoutRef } from 'react';
+import React, { forwardRef, ElementRef, ComponentPropsWithoutRef, useEffect } from 'react';
 import { useControllableState } from '~/core/hooks/useControllableState';
 import NumberFieldContext from '../contexts/NumberFieldContext';
 import { customClassSwitcher } from '~/core';
@@ -17,11 +17,13 @@ export type NumberFieldRootProps = {
     min?: number
     max?: number
     disabled?: boolean
+    locale?: string
+    smallStep?: number
     readOnly?: boolean
     required?: boolean
 } & ComponentPropsWithoutRef<'div'>;
 
-const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>(({ children, name, defaultValue = '', value, onValueChange, largeStep, step, min, max, disabled, readOnly, required, id, className, ...props }, ref) => {
+const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>(({ children, name, defaultValue = '', value, onValueChange, largeStep, smallStep, step, min, max, disabled, readOnly, required, id, locale, className, ...props }, ref) => {
     const rootClass = customClassSwitcher(className, COMPONENT_NAME);
     const [inputValue, setInputValue] = useControllableState<number | ''>(
         value,
@@ -69,17 +71,22 @@ const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>
         });
     };
 
-    const handleStep = ({ type, direction } : {type: 'small'| 'large', direction: 'increment' | 'decrement' }) => {
+    const handleStep = ({ type, direction } : {type: 'small'| 'normal' | 'large', direction: 'increment' | 'decrement' }) => {
         let amount = 0;
 
         switch (type) {
-        case 'small':
+        case 'normal':
             if (!step) return;
             amount = step;
             break;
         case 'large':
             if (!largeStep) return;
             amount = largeStep;
+            break;
+
+        case 'small':
+            if (!smallStep) return;
+            amount = smallStep;
             break;
         }
 
@@ -99,7 +106,8 @@ const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>
         disabled,
         readOnly,
         required,
-        rootClass
+        rootClass,
+        locale
     };
 
     return (
