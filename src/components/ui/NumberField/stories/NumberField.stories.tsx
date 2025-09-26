@@ -9,7 +9,7 @@ export default {
 
 export const Basic = () => (
     <SandboxEditor>
-        <NumberField.Root defaultValue={5} step={1} min={-10} max={11000} largeStep={5} smallStep={2} locale="ja-JP">
+        <NumberField.Root defaultValue={5} step={1} min={-10} max={11000} largeStep={5} smallStep={0.5} locale="ja-JP">
             <NumberField.Decrement>-</NumberField.Decrement>
             <NumberField.Input />
             <NumberField.Increment>+</NumberField.Increment>

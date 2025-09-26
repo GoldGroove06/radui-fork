@@ -1,5 +1,5 @@
 import React, { useContext, forwardRef, ElementRef, ComponentPropsWithoutRef, useState } from 'react';
-import NumberFieldContext from '../contexts/NumberFieldContext';
+import NumberFieldContext, { type NumberFieldContextType } from '../contexts/NumberFieldContext';
 import clsx from 'clsx';
 
 export type NumberFieldInputElement = ElementRef<'input'>;
@@ -11,6 +11,7 @@ const NumberFieldInput = forwardRef<NumberFieldInputElement, NumberFieldInputPro
         console.error('NumberFieldInput must be used within a NumberField');
         return null;
     }
+    const typedContext = context as NumberFieldContextType;
     const {
         inputValue,
         handleOnChange,
@@ -22,7 +23,7 @@ const NumberFieldInput = forwardRef<NumberFieldInputElement, NumberFieldInputPro
         required,
         rootClass,
         locale
-    } = context;
+    } = typedContext;
 
     const [draft, setDraft] = useState<string | null>(null);
 
@@ -69,13 +70,19 @@ const NumberFieldInput = forwardRef<NumberFieldInputElement, NumberFieldInputPro
             onKeyDown={handleKeyDown}
             value={ value()}
             onChange={(e) => {
-                const onlyNums = e.target.value.replace(/(?!^-)[^0-9]/g, '');
-                if (onlyNums === '-') {
-                    setDraft('-');
+                // Allow leading '-', digits, and a single decimal point
+                let next = e.target.value
+                    .replace(/(?!^-)[^0-9.]/g, '') // remove non-digit/non-dot except leading '-'
+                    .replace(/(\..*)\./g, '$1'); // keep only the first dot
+
+                // Handle draft states for '-', '.', and '-.' so user can continue typing
+                if (next === '-' || next === '.' || next === '-.') {
+                    setDraft(next);
                     return;
                 }
+
                 setDraft(null);
-                handleOnChange(onlyNums === '' ? '' : Number(onlyNums));
+                handleOnChange(next === '' ? '' : Number(next));
             }}
             id={id}
             name={name}

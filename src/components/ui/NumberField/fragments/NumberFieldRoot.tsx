@@ -23,7 +23,7 @@ export type NumberFieldRootProps = {
     required?: boolean
 } & ComponentPropsWithoutRef<'div'>;
 
-const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>(({ children, name, defaultValue = '', value, onValueChange, largeStep, smallStep, step, min, max, disabled, readOnly, required, id, locale, className, ...props }, ref) => {
+const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>(({ children, name, defaultValue = '', value, onValueChange, largeStep=10, smallStep=0.1, step=1, min, max, disabled, readOnly, required, id, locale, className, ...props }, ref) => {
     const rootClass = customClassSwitcher(className, COMPONENT_NAME);
     const [inputValue, setInputValue] = useControllableState<number | ''>(
         value,
@@ -57,7 +57,24 @@ const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>
                     temp = -1;
                 }
             }
-            const nextValue = temp + amount;
+
+            const countDecimals = (num: number) => {
+                const text = num.toString();
+                if (text.includes('e-')) {
+                    const [base, exp] = text.split('e-');
+                    const decimalsInBase = (base.split('.')[1] || '').length;
+                    return Number(exp) + decimalsInBase;
+                }
+                const decimals = (text.split('.')[1] || '').length;
+                return decimals;
+            };
+
+            const decimals = Math.max(countDecimals(amount), 0);
+            const factor = Math.pow(10, decimals);
+            const summed = temp + amount;
+            const rounded = Math.round(summed * factor) / factor;
+
+            const nextValue = rounded;
 
             if (max !== undefined && nextValue > max) {
                 return max;
@@ -91,7 +108,7 @@ const NumberFieldRoot = forwardRef<NumberFieldRootElement, NumberFieldRootProps>
         }
 
         if (direction === 'decrement') {
-            amount *= -1;
+            amount = -amount;
         }
 
         applyStep(amount);
