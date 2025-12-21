@@ -1,5 +1,11 @@
 # @radui/ui
 
+## 0.2.0
+
+### Minor Changes
+
+- 140d24d: Renamed the select to combobox primitive and separated themed components for select and combobox
+
 ## 0.1.10
 
 ### Patch Changes
